@@ -33,6 +33,7 @@ namespace EnhancedMapServerNetCore.Managers
             { "statistics", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, Statistics)},
             { "setprivileges", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, SetPrivileges)},
             { "setloginsys", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, SetLoginSystem)},
+            { "autocreate", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, SetAutoCreate)},
             { "setroompassword", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, SetRoomPassword)},
             { "getroompassword", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, GetRoomPassword)},
             { "allrooms", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, AllRooms)},
@@ -40,7 +41,6 @@ namespace EnhancedMapServerNetCore.Managers
             { "setkicktime", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, SetKickTime)},
             { "setmaxusersconnection", new Tuple<ACCOUNT_LEVEL, Action<User, string[]>>(ACCOUNT_LEVEL.SERVER_ADMIN, SetMaxUsersConnection)}
         };
-
 
         private static void SendTo(User user, string msg, bool istable = false)
         {
@@ -442,6 +442,21 @@ namespace EnhancedMapServerNetCore.Managers
             if (int.TryParse(args[0], out int result) && (result == 0 || result == 1))
             {
                 SettingsManager.Configuration.CredentialsSystem = (CREDENTIAL_SYSTEM) result;
+                SendTo(user, "Done");
+            }
+            else
+                SendTo(user, "Something wrong...");
+        }
+
+        private static void SetAutoCreate( User user, string[] args )
+        {
+            if ( args.Length < 1 )
+                return;
+
+            if ( int.TryParse( args[0], out int result ) && ( result == 0 || result == 1 ) )
+            {
+                SettingsManager.Configuration.AutoCreateUsers = result == 1;
+
                 SendTo(user, "Done");
             }
             else
