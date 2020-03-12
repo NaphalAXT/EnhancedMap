@@ -246,7 +246,27 @@ namespace EnhancedMapServerNetCore.Managers
                         CommandManager.ExecuteFromConsole(input, args);
                         break;
                     case "setloginsys":
+                        args = new string[1];
 
+                        Console.WriteLine("Login system [write '0' for 'Login + Password', '1' for 'Room password only']:");
+                        result = Console.ReadLine().Trim();
+
+                        args[0] = result;
+
+                        CommandManager.ExecuteFromConsole( input, args );
+
+                        break;
+
+                    case "autocreate":
+                        args = new string[1];
+
+                        Console.WriteLine("Auto create unknown users (in 'General' room) [write '0' for 'No', '1' for 'Yes']:");
+
+                        result = Console.ReadLine().Trim();
+
+                        args[0] = result;
+
+                        CommandManager.ExecuteFromConsole(input, args);
 
                         break;
 
@@ -259,6 +279,7 @@ namespace EnhancedMapServerNetCore.Managers
                         CommandManager.ExecuteFromConsole(input, args);
 
                         break;
+
                 }
             }
 

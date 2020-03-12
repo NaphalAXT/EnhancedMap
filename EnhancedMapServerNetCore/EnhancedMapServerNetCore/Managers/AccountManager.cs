@@ -103,8 +103,15 @@ namespace EnhancedMapServerNetCore.Managers
             Account account = Get(username);
             if (account == null)
             {
-                Log.Message(LogTypes.Trace, $"Account '{username}' not exists");
-                return false;
+                if (!SettingsManager.Configuration.AutoCreateUsers)
+                {
+                    Log.Message(LogTypes.Trace, $"Account '{username}' not exists");
+                    return false;
+                }
+
+                Add(username, password, "General", ACCOUNT_LEVEL.NORMAL);
+
+                _accounts.TryGetValue(username, out account);
             }
 
             if (!account.IsPasswordGood(password))

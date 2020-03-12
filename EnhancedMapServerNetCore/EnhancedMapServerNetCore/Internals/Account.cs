@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Xml;
+using EnhancedMapServerNetCore.Configuration;
 using EnhancedMapServerNetCore.Cryptography;
 using EnhancedMapServerNetCore.Managers;
 
@@ -76,7 +77,18 @@ namespace EnhancedMapServerNetCore.Internals
 
         public bool IsPasswordGood(string psw)
         {
-            return CryptedPassword == SHA1.Protect(Name + psw);
+            switch ( SettingsManager.Configuration.CredentialsSystem )
+            {
+                case CREDENTIAL_SYSTEM.USERNAME_AND_ID:
+                    return CryptedPassword == SHA1.Protect(Name + psw);
+
+                case CREDENTIAL_SYSTEM.ONLY_PASSWORD:
+
+                    return psw == Room.Password;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public void CryptPassword(string input)
